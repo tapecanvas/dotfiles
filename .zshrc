@@ -1,6 +1,10 @@
 # ~/.zshrc
 PS1='%F{#a5c99d}%B%S%n%s%f %F{#c79dbf}%b%~>%f %F{#c9c19d}'
 
+alias ls='ls --color'
+
+setopt interactive_comments
+
 typeset -g -A key
 key[Home]="${terminfo[khome]}"
 key[End]="${terminfo[kend]}"
