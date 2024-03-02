@@ -1,10 +1,7 @@
- 
-################# Start of all the settings
-
 # KEY DEFINITIONS TO REMEMBER
-# $mod = Set below
-# Mod4 = Super key
-# Mod1 = ALT key
+# $mod = SUPER
+# Mod4 = SUPER
+# Mod1 = ALT 
 # Control = CTRL key
 # Shift = SHIFT key
 # Escape = ESCAPE key
@@ -23,38 +20,44 @@ set $mod Mod4
 ################# Define the movements keys - variables
 
 # This is setup for qwerty
-# set $right to m if using azerty keyboard
-set $up l
-set $down k
-set $left j
-set $right semicolon
+# using vim keys hjkl 
+set $up k
+set $down j
+set $left h
+set $right l
+
+
+# Polybar
+ exec --no-startup-id polybar
 
 ################# Single and Dual screen
 
 # current displays
-exec --no-startup-id xrandr --output eDP-1 --mode 1920x1080
+# laptop screen 
+exec --no-startup-id xrandr --output eDP-1 --primary --below HDMI-1 --mode 1920x1080
+exec --no-startup-id xrandr --output HDMI-1 --above eDP-1 --mode auto
 # reload wallpaper using Nitrogen
-# exec --no-startup-id nitrogen --restore
-#                              exec_always --no-startup-id killall back4.sh
-#                              exec_always --no-startup-id $HOME/back4.sh 0.05 Pictures/wallpaper/6.gif
+exec --no-startup-id nitrogen --restore
 
-exec_always --no-startup-id feh --bg-fill Pictures/wallpaper/misty-mountain.jpg
-# exec --no-startup-id picom
+# gif wallpaper using back4.sh
+# exec_always --no-startup-id killall back4.sh
+# exec_always --no-startup-id $HOME/back4.sh 0.05 Pictures/wallpaper/6.gif
+
+# mouse
+set $Xcursor.size: 16
+exec_always --no-startup-id unclutter --start-hidden --jitter 15 --ignore-scrolling --idle 1
+
+# compositor (picom)
+exec --no-startup-id picom --config .config/picom/picom.conf
+
+# i3 layouts
 exec_always --no-startup-id i3-layouts
 
 # start redshift
-# exec --no-startup-id redshift -l 35.05:-85.31 -t 6500:4000
+exec --no-startup-id redshift -l 35.05:-85.31 -t 6500:3000
 
-
-# setting variables for later use
-# use xrandr and/or arandr to know the names of your monitors
-# use this line to tell which monitor is on the right
-# xrandr --output DVI-I-2 --right-of DVI-I-1 --auto
-# exec --no-startup-id xrandr --output LVDS1 --mode 1366x768 --output DP3 --mode 1920x1080 --right-of LVDS1
-# exec --no-startup-id xrandr --output DVI-I-0 --right-of HDMI-0 --auto
-# exec --no-startup-id xrandr --output DVI-1 --right-of DVI-0 --auto
-# exec --no-startup-id xrandr --output DVI-D-1 --right-of DVI-I-1 --auto
- exec --no-startup-id xrandr --output HDMI-1 --right-of eDP-1 --auto
+# external monitor setup
+# exec --no-startup-id xrandr --output HDMI-1 --above eDP-1 --mode 1920x1080
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -72,8 +75,8 @@ exec_always --no-startup-id i3-layouts
 
 # current setup
 
-# set $firstMonitor HDMI-1
-#set $secondMonitor HDMI-2
+set $firstMonitor eDP-1
+set $secondMonitor HDMI-1
 
 # Other Examples
 
@@ -130,51 +133,16 @@ bindsym $mod+Shift+0 move container to workspace 10; workspace 10
 ################# menu's in arcolinux
 
 # start dmenu
-# bindsym $mod+d exec --no-startup-id dmenu_run -nb '#101010' -nf '#c79dbf'
-bindsym $mod+d exec --no-startup-id dmenu_run -nb '#101010' -nf '#c79dbf' -sb '#a5c99d' -sf '#101010' -i -b -p 'query:' -fn 'Hack-15'
-# this was added to the line above ->      -i -nb '#191919' -nf '#fea63c' -sb '#fea63c' -sf '#191919' -fn 'NotoMonoRegular:bold:pixelsize=14'
+#bindsym $mod+shift+d exec --no-startup-id dmenu_run -nb '#101010' -nf '#c79dbf' -sb '#a5c99d' -sf '#101010' -i -b -p 'query:' -fn 'Hack-15'
 
-# start rofi
-#bindsym $mod+d exec --no-startup-id rofi -show drun
-
-# start xfce4-appfinder
-bindsym mod1+F2 exec --no-startup-id xfce4-appfinder --collapsed
-
-# start xfce-appfinder
-bindsym mod1+F3 exec --no-startup-id xfce4-appfinder
-
-# start xlunch app launcher
-# bindsym mod1+F5 exec --no-startup-id xlunch --config ~/.config/xlunch/default.conf --input ~/.config/xlunch/entries.dsv
-
-# start rofi full
-bindsym $mod+F11 exec --no-startup-id "rofi -font 'Noto Sans 13' -theme-str 'window {width: 100%;height: 100%;}' -show drun"
-
-# start rofi small
-bindsym $mod+F12 exec --no-startup-id rofi -show drun -font "Noto Sans 13"
+# open rofi drun
+bindsym $mod+d exec --no-startup-id rofi -show drun
+#bindsym $mod+shift+d exec rofi -show filebrowser
 
 ################# how to exit, logoff, suspend, ...
-
-# Backup exit
-# Press ctrl+alt+x - check toolbar for next choices
-bindsym control+mod1+X mode "$mode_system"
-
-set $mode_system System (k) lock, (l) logout, (u) suspend, (h) hibernate, (r) reboot, (s) shutdown
-mode "$mode_system" {
-    bindsym k exec --no-startup-id ~/.config/i3/scripts/i3exit.sh lock, mode "default"
-    bindsym l exec --no-startup-id ~/.config/i3/scripts/i3exit.sh logout, mode "default"
-    bindsym u exec --no-startup-id ~/.config/i3/scripts/i3exit.sh suspend, mode "default"
-    bindsym h exec --no-startup-id ~/.config/i3/scripts/i3exit.sh hibernate, mode "default"
-    bindsym r exec --no-startup-id ~/.config/i3/scripts/i3exit.sh reboot, mode "default"
-    bindsym s exec --no-startup-id ~/.config/i3/scripts/i3exit.sh shutdown, mode "default"
-
-    # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-# ArcoLinux Logout
+# ArchLinux Logout
 bindsym $mod+Shift+e exec --no-startup-id archlinux-logout
-bindsym $mod+X exec --no-startup-id archlinux-logout
+
 
 ################# reload changed configuration
 
@@ -186,7 +154,6 @@ bindsym $mod+Shift+c reload
 ################# Stopping an application
 
 # kill focused window
-bindsym $mod+Shift+q kill
 bindsym $mod+q kill
 
 ################# Moving around in i3
@@ -203,23 +170,11 @@ bindsym $mod+$down focus down
 bindsym $mod+$up focus up
 bindsym $mod+$right focus right
 
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
-
 # move focused window
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
 bindsym $mod+Shift+$right move right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
 
 ################# moving around workspaces
 
@@ -241,20 +196,13 @@ for_window [urgent=latest] focus
 # orientation for new workspaces
 default_orientation horizontal
 
-# split in horizontal orientation
-# bindsym $mod+h split h
-
-# split in vertical orientation
-# bindsym $mod+v split v
-
 # enter fullscreen mode for the focused container
-# Super + F in arcolinux is execute thunar
 bindsym $mod+f fullscreen toggle
 
 
 #######i3-layouts
 #######switching
-bindsym $mod+s exec i3l 2columns left
+bindsym $mod+s exec i3l 2columns right
 bindsym $mod+z exec i3l spiral
 bindsym $mod+e exec i3l 3columns
 ####################################
@@ -427,7 +375,7 @@ exec --no-startup-id volumeicon
 # exec --no-startup-id feh --bg-fill /usr/share/archlinux-tweak-tool/data/wallpaper/wallpaper.png &
 
 # Polybar
- exec --no-startup-id polybar
+# exec --no-startup-id polybar
 
 ################# system applications
 
@@ -474,8 +422,8 @@ bindsym control+mod1+m exec --no-startup-id xfce4-settings-manager
 #bindsym control+mod1+c exec --no-startup-id catfish;focus
 
 # archlinux-logout
-bindsym control+mod1+k exec --no-startup-id archlinux-logout
-bindsym control+mod1+l exec --no-startup-id archlinux-logout
+#bindsym control+mod1+k exec --no-startup-id archlinux-logout
+#bindsym control+mod1+l exec --no-startup-id archlinux-logout
 
 # rofi theme selector
 # bindsym control+mod1+r exec --no-startup-id rofi-theme-selector
@@ -488,7 +436,7 @@ bindsym control+mod1+l exec --no-startup-id archlinux-logout
 # bindsym $mod+h exec --no-startup-id htop;focus
 
 # pavucontrol
-bindsym control+mod1+u exec --no-startup-id pavucontrol
+#bindsym control+mod1+u exec --no-startup-id pavucontrol
 
 # start xfce-appfinder
 # arcolinux does not seem to work
@@ -496,6 +444,9 @@ bindsym control+mod1+a exec --no-startup-id xfce4-appfinder
 
 # pamac-manager
 bindsym control+mod1+p exec --no-startup-id pamac-manager
+
+# start udiskie - automount drives
+exec --no-startup-id udiskie -t &
 
 # xkill
 bindsym --release $mod+Escape exec xkill
@@ -742,7 +693,7 @@ mode "$mode_gaps_outer" {
 ################# picom of i3wm
 
 # if you want transparency on non-focused windows, ...
-exec_always --no-startup-id picom   --config .i3/picom.conf
+#exec_always --no-startup-id picom   --config .i3/picom.conf
 
 # bindsym control+mod1+o exec --no-startup-id ~/.config/i3/scripts/picom-toggle.sh
 
